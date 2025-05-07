@@ -31,6 +31,10 @@ Home Care Service
 Manage Rating
 ![image](https://github.com/user-attachments/assets/e01eb914-d84e-4e64-9786-053412470fbc)
 
+Hospital Admin Registration
+![image](https://github.com/user-attachments/assets/22993206-ff75-4bfd-87f1-2a6fb9835b4c)
+
+
 
 
 
