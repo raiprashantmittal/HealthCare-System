@@ -1,0 +1,70 @@
+//Registration Page For Hospital 
+import React, { useState } from "react";
+
+const HospitalAdminRegistration = () => {
+  const [formData, setFormData] = useState({
+    hospitalName: "",
+    adminName: "",
+    email: "",
+    phone: "",
+    password: "",
+    confirmPassword: "",
+    address: "",
+    city: "",
+    state: "",
+    pincode: "",
+    registrationNumber: "",
+    hospitalType: "",
+    numberOfBeds: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+    console.log("Hospital Admin Registration Data:", formData);
+    alert("Hospital registered successfully!");
+    // Reset form or call API here
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+      <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-3xl">
+        <h2 className="text-2xl font-bold text-blue-600 mb-4 text-center">Hospital Admin Registration</h2>
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <input name="hospitalName" placeholder="Hospital Name" className="input" onChange={handleChange} required />
+          <input name="adminName" placeholder="Admin Full Name" className="input" onChange={handleChange} required />
+          <input name="email" type="email" placeholder="Email Address" className="input" onChange={handleChange} required />
+          <input name="phone" type="tel" placeholder="Phone Number" className="input" onChange={handleChange} required />
+          <input name="password" type="password" placeholder="Password" className="input" onChange={handleChange} required />
+          <input name="confirmPassword" type="password" placeholder="Confirm Password" className="input" onChange={handleChange} required />
+          <input name="address" placeholder="Hospital Address" className="input" onChange={handleChange} required />
+          <input name="city" placeholder="City" className="input" onChange={handleChange} required />
+          <input name="state" placeholder="State" className="input" onChange={handleChange} required />
+          <input name="pincode" type="number" placeholder="Pincode" className="input" onChange={handleChange} required />
+          <input name="registrationNumber" placeholder="Registration Number" className="input" onChange={handleChange} required />
+          <select name="hospitalType" className="input" onChange={handleChange} required>
+            <option value="">Select Hospital Type</option>
+            <option value="Government">Government</option>
+            <option value="Private">Private</option>
+          </select>
+          <input name="numberOfBeds" type="number" placeholder="Number of Beds" className="input" onChange={handleChange} required />
+          <div className="col-span-full">
+            <button type="submit" className="bg-blue-600 text-white w-full py-2 rounded hover:bg-blue-700">
+              Register Hospital
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export default HospitalAdminRegistration;
