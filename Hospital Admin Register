@@ -1,0 +1,153 @@
+import React, { useState } from "react";
+
+const HospitalAdminRegistration = () => {
+  const [formData, setFormData] = useState({
+    hospitalName: "",
+    adminName: "",
+    email: "",
+    phone: "",
+    password: "",
+    confirmPassword: "",
+    address: "",
+    city: "",
+    state: "",
+    pincode: "",
+    registrationNumber: "",
+    hospitalType: "",
+    numberOfBeds: "",
+  });
+
+  const [errors, setErrors] = useState({});
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const validate = () => {
+    const newErrors = {};
+
+    if (!formData.hospitalName.trim()) newErrors.hospitalName = "Hospital Name is required";
+    if (!formData.adminName.trim()) newErrors.adminName = "Admin Name is required";
+    if (!formData.email) {
+      newErrors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "Invalid email format";
+    }
+    if (!formData.phone) {
+      newErrors.phone = "Phone number is required";
+    } else if (!/^\d{10}$/.test(formData.phone)) {
+      newErrors.phone = "Phone must be 10 digits";
+    }
+    if (!formData.password) newErrors.password = "Password is required";
+    if (formData.password && formData.password.length < 6)
+      newErrors.password = "Password must be at least 6 characters";
+
+    if (!formData.confirmPassword) newErrors.confirmPassword = "Confirm your password";
+    else if (formData.password !== formData.confirmPassword)
+      newErrors.confirmPassword = "Passwords do not match";
+
+    if (!formData.address.trim()) newErrors.address = "Address is required";
+    if (!formData.city.trim()) newErrors.city = "City is required";
+    if (!formData.state.trim()) newErrors.state = "State is required";
+    if (!formData.pincode) {
+      newErrors.pincode = "Pincode is required";
+    } else if (!/^\d{6}$/.test(formData.pincode)) {
+      newErrors.pincode = "Pincode must be 6 digits";
+    }
+
+    if (!formData.registrationNumber.trim())
+      newErrors.registrationNumber = "Registration number is required";
+    if (!formData.hospitalType) newErrors.hospitalType = "Select hospital type";
+    if (!formData.numberOfBeds || Number(formData.numberOfBeds) <= 0)
+      newErrors.numberOfBeds = "Enter valid number of beds";
+
+    return newErrors;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const validationErrors = validate();
+    setErrors(validationErrors);
+
+    if (Object.keys(validationErrors).length === 0) {
+      console.log("Hospital Admin Registration Data:", formData);
+      alert("Hospital registered successfully!");
+      // Reset or API call here
+    }
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+      <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-3xl">
+        <h2 className="text-2xl font-bold text-blue-600 mb-4 text-center">
+          Hospital Admin Registration
+        </h2>
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {[
+            { name: "hospitalName", placeholder: "Hospital Name" },
+            { name: "adminName", placeholder: "Admin Full Name" },
+            { name: "email", type: "email", placeholder: "Email Address" },
+            { name: "phone", type: "tel", placeholder: "Phone Number" },
+            { name: "password", type: "password", placeholder: "Password" },
+            { name: "confirmPassword", type: "password", placeholder: "Confirm Password" },
+            { name: "address", placeholder: "Hospital Address" },
+            { name: "city", placeholder: "City" },
+            { name: "state", placeholder: "State" },
+            { name: "pincode", type: "number", placeholder: "Pincode" },
+            { name: "registrationNumber", placeholder: "Registration Number" },
+          ].map(({ name, type = "text", placeholder }) => (
+            <div key={name}>
+              <input
+                name={name}
+                placeholder={placeholder}
+                type={type}
+                className="input w-full border p-2 rounded"
+                value={formData[name]}
+                onChange={handleChange}
+              />
+              {errors[name] && <p className="text-red-500 text-sm">{errors[name]}</p>}
+            </div>
+          ))}
+
+          <div>
+            <select
+              name="hospitalType"
+              className="input w-full border p-2 rounded"
+              value={formData.hospitalType}
+              onChange={handleChange}
+            >
+              <option value="">Select Hospital Type</option>
+              <option value="Government">Government</option>
+              <option value="Private">Private</option>
+            </select>
+            {errors.hospitalType && <p className="text-red-500 text-sm">{errors.hospitalType}</p>}
+          </div>
+
+          <div>
+            <input
+              name="numberOfBeds"
+              type="number"
+              placeholder="Number of Beds"
+              className="input w-full border p-2 rounded"
+              value={formData.numberOfBeds}
+              onChange={handleChange}
+            />
+            {errors.numberOfBeds && <p className="text-red-500 text-sm">{errors.numberOfBeds}</p>}
+          </div>
+
+          <div className="col-span-full">
+            <button
+              type="submit"
+              className="bg-blue-600 text-white w-full py-2 rounded hover:bg-blue-700"
+            >
+              Register Hospital
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export default HospitalAdminRegistration;
