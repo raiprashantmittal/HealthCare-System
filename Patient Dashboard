@@ -1,0 +1,19 @@
+import React from "react";
+
+const Dashboard = () => {
+  return (
+    <div className="p-4">
+      <h2 className="text-2xl font-bold mb-4">Patient Dashboard</h2>
+      <ul className="space-y-2">
+        <li><a href="/appointments" className="text-blue-600">View Appointments</a></li>
+        <li><a href="/profile" className="text-blue-600">Manage Profile</a></li>
+        <li><a href="/visited-doctors" className="text-blue-600">Visited Doctors</a></li>
+        <li><a href="/uploaded-prescriptions" className="text-blue-600">View Prescriptions</a></li>
+        <li><a href="/ratings" className="text-blue-600">Give Ratings</a></li>
+        <li><a href="/medical-history" className="text-blue-600">Medical History</a></li>
+      </ul>
+    </div>
+  );
+};
+
+export default Dashboard;
