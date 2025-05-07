@@ -6,14 +6,24 @@ Register
 ![image](https://github.com/user-attachments/assets/3a54d00f-fd38-413f-8d96-293381142218)
 
 Forgot Password
+
 ![image](https://github.com/user-attachments/assets/38029671-c07b-494c-bdf7-661d08326c03)
 
 Doctor Dashboard (Appointment)
 ![image](https://github.com/user-attachments/assets/3bee57bc-8799-461b-8ef5-3bdc6af03451)
 
 Rating & Review
+![image](https://github.com/user-attachments/assets/15ce60e5-af40-4159-8e82-6f1d4319425c)
 
 
 Upload Prescription
+![image](https://github.com/user-attachments/assets/ed3cb450-0558-40a1-9f40-180806879993)
+
+Patient Record
+![image](https://github.com/user-attachments/assets/66605856-e073-4dde-88a2-a0aebe2cfd52)
+
+
+
+
 
 
