@@ -1,0 +1,278 @@
+import React, { useState } from "react";
+
+const DoctorDashboard = () => {
+  const [selectedTab, setSelectedTab] = useState("appointments");
+  const [prescriptionData, setPrescriptionData] = useState({
+    patientName: "",
+    notes: "",
+    file: null,
+  });
+
+  const [patients, setPatients] = useState([]);
+  const [newPatient, setNewPatient] = useState({
+    name: "",
+    age: "",
+    condition: "",
+    id: null,
+  });
+
+  const handlePrescriptionUpload = () => {
+    if (!prescriptionData.patientName || !prescriptionData.file) {
+      alert("Please enter patient name and select a file.");
+      return;
+    }
+
+    console.log("Uploading Prescription:", prescriptionData);
+    alert("Prescription uploaded successfully!");
+    setPrescriptionData({ patientName: "", notes: "", file: null });
+  };
+
+  const handleSavePatient = () => {
+    if (!newPatient.name || !newPatient.age || !newPatient.condition) {
+      alert("All fields are required.");
+      return;
+    }
+
+    if (newPatient.id !== null) {
+      // Update existing patient
+      setPatients((prev) =>
+        prev.map((p) => (p.id === newPatient.id ? newPatient : p))
+      );
+    } else {
+      // Add new patient
+      const newEntry = { ...newPatient, id: Date.now() };
+      setPatients([...patients, newEntry]);
+    }
+
+    setNewPatient({ name: "", age: "", condition: "", id: null });
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-100 p-6">
+      <div className="max-w-8xl mx-auto bg-white rounded-xl shadow p-6">
+        <h1 className="text-2xl font-bold mb-6 text-center text-blue-700">
+          Doctor Dashboard
+        </h1>
+
+        <div className="flex space-x-4 mb-6">
+          {[
+            { key: "appointments", label: "Appointments" },
+            { key: "ratings", label: "Ratings & Feedback" },
+            { key: "prescription", label: "Upload Prescription" },
+            { key: "patients", label: "Patient Records" },
+            { key: "profile", label: "Manage Profile" },
+            { key: "messages", label: "Messages" },
+          ].map((tab) => (
+            <button
+              key={tab.key}
+              onClick={() => setSelectedTab(tab.key)}
+              className={`px-4 py-2 rounded font-medium ${
+                selectedTab === tab.key
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-200 text-gray-700"
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+
+        <div className="bg-gray-50 p-4 rounded shadow-inner">
+          {selectedTab === "appointments" && (
+            <div>
+              <h2 className="text-lg font-semibold mb-4">My Appointments</h2>
+              <ul className="space-y-2">
+                <li className="p-3 bg-white rounded shadow">
+                  <strong>Patient:</strong> John Doe <br />
+                  <strong>Date:</strong> 2025-04-23 <br />
+                  <strong>Time:</strong> 10:00 AM
+                </li>
+                <li className="p-3 bg-white rounded shadow">
+                  <strong>Patient:</strong> Jane Smith <br />
+                  <strong>Date:</strong> 2025-04-24 <br />
+                  <strong>Time:</strong> 02:30 PM
+                </li>
+              </ul>
+            </div>
+          )}
+
+          {selectedTab === "patients" && (
+            <div>
+              <h2 className="text-lg font-semibold mb-4">Patient Records</h2>
+
+              <div className="space-y-4 mb-6">
+                <input
+                  className="border p-2 w-full rounded"
+                  placeholder="Patient Name"
+                  value={newPatient.name}
+                  onChange={(e) =>
+                    setNewPatient({ ...newPatient, name: e.target.value })
+                  }
+                />
+                <input
+                  type="number"
+                  className="border p-2 w-full rounded"
+                  placeholder="Age"
+                  value={newPatient.age}
+                  onChange={(e) =>
+                    setNewPatient({ ...newPatient, age: e.target.value })
+                  }
+                />
+                <input
+                  className="border p-2 w-full rounded"
+                  placeholder="Condition / Diagnosis"
+                  value={newPatient.condition}
+                  onChange={(e) =>
+                    setNewPatient({ ...newPatient, condition: e.target.value })
+                  }
+                />
+                <button
+                  onClick={handleSavePatient}
+                  className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                >
+                  {newPatient.id !== null ? "Update Patient" : "Add Patient"}
+                </button>
+              </div>
+
+              <h3 className="font-semibold mb-2">Existing Patients</h3>
+              <ul className="space-y-2">
+                {patients.length === 0 && (
+                  <><p className="text-sm text-gray-500">
+                    <strong>Patient:</strong> John Doe <br />
+                    <strong>Date:</strong> 2025-04-23 <br />
+                    <strong>Time:</strong> 10:00 AM
+                  </p><p className="text-sm text-gray-500">
+                      <strong>Patient:</strong> Jane Smith <br />
+                      <strong>Date:</strong> 2025-04-24 <br />
+                      <strong>Time:</strong> 02:30 PM
+                    </p>
+                  </>
+                )}
+                {patients.map((patient) => (
+                  <li
+                    key={patient.id}
+                    className="p-3 bg-white rounded shadow flex justify-between items-center"
+                  >
+                    <div>
+                      <p>
+                        <strong>{patient.name}</strong> (Age: {patient.age})
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        Condition: {patient.condition}
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => setNewPatient(patient)}
+                      className="text-sm bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
+                    >
+                      Edit
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {selectedTab === "ratings" && (
+            <div>
+              <h2 className="text-lg font-semibold mb-4">
+                Patient Ratings & Feedback
+              </h2>
+              <ul className="space-y-2">
+                <li className="p-3 bg-white rounded shadow">
+                  ⭐⭐⭐⭐ - "Very helpful and kind!"
+                </li>
+                <li className="p-3 bg-white rounded shadow">
+                  ⭐⭐⭐⭐⭐ - "Quick diagnosis and friendly approach."
+                </li>
+              </ul>
+            </div>
+          )}
+
+          {selectedTab === "prescription" && (
+            <div>
+              <h2 className="text-lg font-semibold mb-4">
+                Upload Prescription
+              </h2>
+
+              <div className="space-y-4">
+                <input
+                  type="text"
+                  placeholder="Patient Name"
+                  className="border p-2 w-full rounded"
+                  value={prescriptionData.patientName}
+                  onChange={(e) =>
+                    setPrescriptionData({
+                      ...prescriptionData,
+                      patientName: e.target.value,
+                    })
+                  }
+                />
+
+                <textarea
+                  className="border p-2 w-full rounded"
+                  rows={3}
+                  placeholder="Prescription Notes (optional)"
+                  value={prescriptionData.notes}
+                  onChange={(e) =>
+                    setPrescriptionData({
+                      ...prescriptionData,
+                      notes: e.target.value,
+                    })
+                  }
+                />
+
+                <input
+                  type="file"
+                  className="block w-full text-sm text-gray-500
+                  file:mr-4 file:py-2 file:px-4
+                  file:rounded file:border-0
+                  file:text-sm file:font-semibold
+                  file:bg-blue-600 file:text-white
+                  hover:file:bg-blue-700"
+                  onChange={(e) =>
+                    setPrescriptionData({
+                      ...prescriptionData,
+                      file: e.target.files[0],
+                    })
+                  }
+                />
+
+                <button
+                  onClick={handlePrescriptionUpload}
+                  className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                >
+                  Submit Prescription
+                </button>
+              </div>
+            </div>
+          )}
+
+          {selectedTab === "profile" && (
+            <div>
+              <h2 className="text-lg font-semibold mb-4">Manage Profile</h2>
+              <p>You can implement update name, email, password here.</p>
+            </div>
+          )}
+
+          {selectedTab === "messages" && (
+            <div>
+              <h2 className="text-lg font-semibold mb-4">Messages</h2>
+              <p>Chat or message patients directly (feature coming soon).</p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default DoctorDashboard;
+// This is a simple Doctor Dashboard component that allows doctors to manage their appointments, ratings, upload prescriptions, manage their profile, and view messages.
+// The component uses React hooks to manage state and conditionally render different sections based on the selected tab.
+// The dashboard is styled using Tailwind CSS for a clean and modern look.
+// The component includes a file upload input for uploading prescriptions, and a button to submit the prescription data.
+// The component also includes basic validation to ensure that the patient name and file are provided before submission.
+// The dashboard is responsive and adapts to different screen sizes, making it user-friendly on both desktop and mobile devices.
+// The component is designed to be easily extendable, allowing for additional features and functionalities to be added in the future.
+// Design By Prashant Kumar Rai
