@@ -1,0 +1,293 @@
+import React, { useState } from "react";
+
+const SupportStaffDashboard = () => {
+  const [selectedTab, setSelectedTab] = useState("appointments");
+
+  // Appointment states
+  const [appointmentData, setAppointmentData] = useState({
+    patientName: "",
+    doctor: "",
+    timeSlot: "",
+  });
+
+  const [availableDoctors] = useState(["Dr. John Doe", "Dr. Jane Smith"]);
+  const [timeSlots] = useState({
+    "Dr. John Doe": ["9:00 AM", "11:00 AM", "2:00 PM"],
+    "Dr. Jane Smith": ["10:00 AM", "1:00 PM", "3:00 PM"],
+  });
+
+  // Home care service states
+  const [homeCareData, setHomeCareData] = useState({
+    patientName: "",
+    worker: "",
+    serviceDate: "",
+    status: "Pending",
+  });
+
+  const [healthcareWorkers] = useState(["Nurse A", "Nurse B", "Health Worker C"]);
+
+  // Feedback management
+  const [feedbackData, setFeedbackData] = useState({
+    appointmentId: "",
+    feedback: "",
+    rating: 0,
+  });
+
+  // Tracking state for number of appointments, home care services, and feedback
+  const [appointments, setAppointments] = useState([]);
+  const [homeCareServices, setHomeCareServices] = useState([]);
+  const [feedbackList, setFeedbackList] = useState([]);
+
+  // Handlers for appointment booking
+  const handleAppointmentChange = (e) => {
+    const { name, value } = e.target;
+    setAppointmentData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleAppointmentSubmit = () => {
+    if (!appointmentData.patientName || !appointmentData.doctor || !appointmentData.timeSlot) {
+      alert("Please fill all appointment details.");
+      return;
+    }
+
+    setAppointments([...appointments, { ...appointmentData, id: appointments.length + 1 }]);
+    alert("Appointment booked successfully!");
+    setAppointmentData({ patientName: "", doctor: "", timeSlot: "" });
+  };
+
+  // Handlers for home care service assignment
+  const handleHomeCareChange = (e) => {
+    const { name, value } = e.target;
+    setHomeCareData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleHomeCareSubmit = () => {
+    if (!homeCareData.patientName || !homeCareData.worker || !homeCareData.serviceDate) {
+      alert("Please fill all home care service details.");
+      return;
+    }
+
+    setHomeCareServices([...homeCareServices, { ...homeCareData, id: homeCareServices.length + 1 }]);
+    alert("Home care service assigned successfully!");
+    setHomeCareData({ patientName: "", worker: "", serviceDate: "", status: "Pending" });
+  };
+
+  // Handlers for feedback management
+  const handleFeedbackChange = (e) => {
+    const { name, value } = e.target;
+    setFeedbackData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleFeedbackSubmit = () => {
+    if (!feedbackData.appointmentId || !feedbackData.feedback || feedbackData.rating === 0) {
+      alert("Please fill all feedback details.");
+      return;
+    }
+
+    setFeedbackList([...feedbackList, { ...feedbackData, id: feedbackList.length + 1 }]);
+    alert("Feedback submitted successfully!");
+    setFeedbackData({ appointmentId: "", feedback: "", rating: 0 });
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-100 p-6">
+      <div className="max-w-8xl mx-auto bg-white rounded-xl shadow p-6">
+        <h1 className="text-2xl font-bold mb-6 text-center text-blue-700">Support Staff Dashboard</h1>
+
+        <div className="flex space-x-4 mb-6">
+          {[
+            { key: "appointments", label: "Appointments" },
+            { key: "homecare", label: "Home Care Services" },
+            { key: "feedback", label: "Manage Feedback" },
+          ].map((tab) => (
+            <button
+              key={tab.key}
+              onClick={() => setSelectedTab(tab.key)}
+              className={`px-4 py-2 rounded font-medium ${
+                selectedTab === tab.key ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-700"
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+
+        <div className="bg-gray-50 p-4 rounded shadow-inner">
+          {/* Appointments */}
+          {selectedTab === "appointments" && (
+            <div>
+              <h2 className="text-lg font-semibold mb-4">Book Appointment</h2>
+              <input
+                className="border p-2 w-full mb-4 rounded"
+                placeholder="Patient Name"
+                name="patientName"
+                value={appointmentData.patientName}
+                onChange={handleAppointmentChange}
+              />
+              <select
+                className="border p-2 w-full mb-4 rounded"
+                name="doctor"
+                value={appointmentData.doctor}
+                onChange={handleAppointmentChange}
+              >
+                <option value="">Select Doctor</option>
+                {availableDoctors.map((doctor, index) => (
+                  <option key={index} value={doctor}>
+                    {doctor}
+                  </option>
+                ))}
+              </select>
+              <select
+                className="border p-2 w-full mb-4 rounded"
+                name="timeSlot"
+                value={appointmentData.timeSlot}
+                onChange={handleAppointmentChange}
+              >
+                <option value="">Select Time Slot</option>
+                {appointmentData.doctor &&
+                  timeSlots[appointmentData.doctor]?.map((slot, index) => (
+                    <option key={index} value={slot}>
+                      {slot}
+                    </option>
+                  ))}
+              </select>
+              <button
+                onClick={handleAppointmentSubmit}
+                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+              >
+                Book Appointment
+              </button>
+              <div className="mt-6">
+                <p className="font-semibold">Total Appointments Assigned: {appointments.length}</p>
+                <h3 className="mt-4 font-semibold">Appointments Details:</h3>
+                <ul>
+                  {appointments.map((appointment) => (
+                    <li key={appointment.id} className="border p-4 my-2 rounded">
+                      <p><strong>Patient:</strong> {appointment.patientName}</p>
+                      <p><strong>Doctor:</strong> {appointment.doctor}</p>
+                      <p><strong>Time Slot:</strong> {appointment.timeSlot}</p>
+                      <p><strong>Status:</strong> {appointment.status || "Pending"}</p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )}
+
+          {/* Home Care Services */}
+          {selectedTab === "homecare" && (
+            <div>
+              <h2 className="text-lg font-semibold mb-4">Assign Home Care Service</h2>
+              <input
+                className="border p-2 w-full mb-4 rounded"
+                placeholder="Patient Name"
+                name="patientName"
+                value={homeCareData.patientName}
+                onChange={handleHomeCareChange}
+              />
+              <select
+                className="border p-2 w-full mb-4 rounded"
+                name="worker"
+                value={homeCareData.worker}
+                onChange={handleHomeCareChange}
+              >
+                <option value="">Select Worker</option>
+                {healthcareWorkers.map((worker, index) => (
+                  <option key={index} value={worker}>
+                    {worker}
+                  </option>
+                ))}
+              </select>
+              <input
+                type="date"
+                className="border p-2 w-full mb-4 rounded"
+                name="serviceDate"
+                value={homeCareData.serviceDate}
+                onChange={handleHomeCareChange}
+              />
+              <select
+                className="border p-2 w-full mb-4 rounded"
+                name="status"
+                value={homeCareData.status}
+                onChange={handleHomeCareChange}
+              >
+                <option value="Pending">Pending</option>
+                <option value="Ongoing">Ongoing</option>
+                <option value="Completed">Completed</option>
+              </select>
+              <button
+                onClick={handleHomeCareSubmit}
+                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+              >
+                Assign Service
+              </button>
+              <div className="mt-6">
+                <p className="font-semibold">Total Home Care Services Assigned: {homeCareServices.length}</p>
+                <h3 className="mt-4 font-semibold">Home Care Services Details:</h3>
+                <ul>
+                  {homeCareServices.map((service) => (
+                    <li key={service.id} className="border p-4 my-2 rounded">
+                      <p><strong>Patient:</strong> {service.patientName}</p>
+                      <p><strong>Worker:</strong> {service.worker}</p>
+                      <p><strong>Service Date:</strong> {service.serviceDate}</p>
+                      <p><strong>Status:</strong> {service.status}</p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )}
+
+          {/* Feedback Management */}
+          {selectedTab === "feedback" && (
+            <div>
+              <h2 className="text-lg font-semibold mb-4">Manage Feedback</h2>
+              <input
+                className="border p-2 w-full mb-4 rounded"
+                placeholder="Appointment ID"
+                name="appointmentId"
+                value={feedbackData.appointmentId}
+                onChange={handleFeedbackChange}
+              />
+              <textarea
+                className="border p-2 w-full mb-4 rounded"
+                placeholder="Feedback"
+                name="feedback"
+                value={feedbackData.feedback}
+                onChange={handleFeedbackChange}
+              />
+              <input
+                type="number"
+                className="border p-2 w-full mb-4 rounded"
+                placeholder="Rating (1-5)"
+                name="rating"
+                value={feedbackData.rating}
+                onChange={handleFeedbackChange}
+              />
+              <button
+                onClick={handleFeedbackSubmit}
+                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+              >
+                Submit Feedback
+              </button>
+              <div className="mt-6">
+                <h3 className="font-semibold">Feedback Details:</h3>
+                <ul>
+                  {feedbackList.map((feedbackItem) => (
+                    <li key={feedbackItem.id} className="border p-4 my-2 rounded">
+                      <p><strong>Appointment ID:</strong> {feedbackItem.appointmentId}</p>
+                      <p><strong>Feedback:</strong> {feedbackItem.feedback}</p>
+                      <p><strong>Rating:</strong> {feedbackItem.rating}</p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default SupportStaffDashboard;
