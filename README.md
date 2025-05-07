@@ -22,6 +22,18 @@ Upload Prescription
 Patient Record
 ![image](https://github.com/user-attachments/assets/66605856-e073-4dde-88a2-a0aebe2cfd52)
 
+Support Staff (Doctor Apponitment)
+![image](https://github.com/user-attachments/assets/777ea14c-df60-4acb-b729-18d31f278767)
+
+Home Care Service
+![image](https://github.com/user-attachments/assets/99d54710-0779-4749-803f-b67b5e455e62)
+
+Manage Rating
+![image](https://github.com/user-attachments/assets/e01eb914-d84e-4e64-9786-053412470fbc)
+
+
+
+
 
 
 
